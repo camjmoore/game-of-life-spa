@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import "./App.css";
+import styled from "styled-components";
+// import "./App.css";
 
 const rowPlaces = 50;
 const colValues = 50;
+
+const Box = styled.div`
+  display: grid;
+  grid-template-columns: repeat(${colValues}, 20px);
+`;
 
 const App = () => {
   // gridIs --> rows
@@ -18,8 +24,25 @@ const App = () => {
     return rows;
   });
 
-  console.log(gridIs);
-  return <div className="App"></div>;
+  return (
+    <Box>
+      {gridIs.map((rows, i) =>
+        rows.map((col, j) => (
+          <div
+            key={`${i}-${j}`}
+            style={{
+              height: 18,
+              width: 18,
+              margin: "1px 1px auto",
+              borderRadius: "100%",
+              border: "solid 1px black",
+              backgroundColor: gridIs[i][j] ? "palevioletred" : undefined,
+            }}
+          />
+        ))
+      )}
+    </Box>
+  );
 };
 
 export default App;
