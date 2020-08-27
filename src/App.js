@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import produce from "immer";
 // import "./App.css";
 
 const rowPlaces = 50;
@@ -29,14 +30,21 @@ const App = () => {
       {gridIs.map((rows, i) =>
         rows.map((col, j) => (
           <div
+            onClick={() => {
+              // current state, updated state
+              const newGrid = produce(gridIs, (gridCopy) => {
+                //immutable change to true bool
+                gridCopy[i][j] = gridIs[i][j] ? 0 : 1;
+              });
+              setGrid(newGrid);
+            }}
             key={`${i}-${j}`}
             style={{
               height: 18,
               width: 18,
               margin: "1px 1px auto",
               borderRadius: "100%",
-              border: "solid 1px black",
-              backgroundColor: gridIs[i][j] ? "palevioletred" : undefined,
+              backgroundColor: gridIs[i][j] ? "#9DE0AD" : undefined,
             }}
           />
         ))
