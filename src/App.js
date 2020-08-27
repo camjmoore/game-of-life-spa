@@ -31,11 +31,12 @@ const App = () => {
         rows.map((col, j) => (
           <div
             onClick={() => {
-              // current state, updated state
+              //                  current state, updated state
               const newGrid = produce(gridIs, (gridCopy) => {
-                //immutable change to true bool
+                //updated cell position boolean toggle
                 gridCopy[i][j] = gridIs[i][j] ? 0 : 1;
               });
+              //setState to updated state containing updated cell positions
               setGrid(newGrid);
             }}
             key={`${i}-${j}`}
@@ -44,6 +45,7 @@ const App = () => {
               width: 18,
               margin: "1px 1px auto",
               borderRadius: "100%",
+              //color is green if cell position is toggled true otherwise its undefined (blank)
               backgroundColor: gridIs[i][j] ? "#9DE0AD" : undefined,
             }}
           />
