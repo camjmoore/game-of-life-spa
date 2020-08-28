@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 import produce from "immer";
-// import "./App.css";
+import "./App.css";
 
-const rowPlaces = 50;
-const colValues = 50;
+const rowPlaces = 30;
+const colValues = 30;
 // [(UP/DWN), (L/R)]
 // U = -1, D = 1, L = -1, R = 1
 const neighborCoords = [
@@ -95,11 +95,11 @@ const App = () => {
     //the game of life rules will dictate the conditions of cells in each recursive call of f()
 
     //recursively call f() every 1 second to check if growing is true
-    setTimeout(catalyze, 1000);
+    setTimeout(catalyze, 100);
   }, []);
 
   return (
-    <>
+    <div className="App-header">
       <button
         onClick={() => {
           setGrowing(!growing);
@@ -130,16 +130,17 @@ const App = () => {
                 height: 18,
                 width: 18,
                 margin: "1px 1px auto",
-                borderRadius: "80% 0% 80%",
-                border: "solid 1px #a6cc7099",
+                borderRadius: "100%",
+                boxShadow: "inset 0 0 3px #ffcc66",
+                border: "solid 1px #ffcc66",
                 //color is green if cell position is toggled true otherwise its undefined (blank)
-                backgroundColor: gridIs[i][j] ? "#9DE0AD" : undefined,
+                backgroundColor: gridIs[i][j] ? "#ffcc66" : undefined,
               }}
             />
           ))
         )}
       </Box>
-    </>
+    </div>
   );
 };
 
