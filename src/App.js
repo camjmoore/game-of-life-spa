@@ -131,10 +131,10 @@ const App = () => {
                 width: 18,
                 margin: "1px 1px auto",
                 borderRadius: "100%",
-                boxShadow: "inset 0 0 3px #ffcc66",
-                border: "solid 1px #ffcc66",
+                boxShadow: "inset 0 0 3px #484f5e",
+                border: "solid 1px #484f5e",
                 //color is green if cell position is toggled true otherwise its undefined (blank)
-                backgroundColor: gridIs[i][j] ? "#ffcc66" : undefined,
+                backgroundColor: gridIs[i][j] ? "#95e6cb" : undefined,
               }}
             />
           ))
