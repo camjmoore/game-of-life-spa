@@ -5,6 +5,18 @@ import produce from "immer";
 
 const rowPlaces = 50;
 const colValues = 50;
+// [(UP/DWN), (L/R)]
+// U = -1, D = 1, L = -1, R = 1
+const neighborCoords = [
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 1],
+  [1, 0],
+  [-1, -1],
+  [-1, 1],
+  [-1, 0],
+];
 
 const Box = styled.div`
   display: grid;
@@ -41,14 +53,22 @@ const App = () => {
     if (!growingRef) {
       return;
     }
-
+    //otherwise change cells iteratively according to neighbor conditions --> mutate copy of grid state --> update grid state immutably
     setGrid((grid) => {
-      return produce(grid, (gridCopy) => {
+      return produce(grid, gridCopy => {
         for (let i = 0; i < rowPlaces; i++) {
           for (let j = 0; j < colValues; j++) {
             let neighbors = 0;
-            if (gridCopy[i - 1][j - 1] === 1) {
-              neighbors += 1;
+            //dynamically map over neighborCoords for each cell to determine how many possible neighbors a given cell has
+            neighborCoords.forEach(([x, y]) => {
+                //apply the neighbor coordinates to navigate from the origin of a given cell to its neighbors
+                const updatedI = i + x;
+                const updatedJ = j + y;
+                //check that the neighbor coordinates of a given cell fall within the range of the grid
+                if (newI >= 0 && newI < rowPlaces && newJ >= 0 && newJ < colValues) {
+                  neighbors += grid[newI][newJ]
+                }
+              })
             }
           }
         }
