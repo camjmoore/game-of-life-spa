@@ -30,18 +30,38 @@ const App = () => {
   const growingRef = useRef(growing);
   growingRef.current = growing;
 
-  //trigger function should be immune to re-rendering
-  //trigger function only gets created once in time and does not re-render - it does not recreate itself with a new version of growing after its state is updated
+  //trigger next stage of growth based on previous growing state
+  // f() should be immune to re-rendering when growth state changes
+  //useCallback ensures the f() only gets created once in time and does not re-render - it does not recreate itself with a new version of growing after its state is updated
   //but the state it wants to access will be changing
-  //to provide the persisting function with access to the changing state we need to 'hold' the state somewhere outside of its hook with a useref
+  //to provide the stale f() with access to the dynamic state we need to 'hold' the state somewhere outside of its hook with a useref
   const catalyze = useCallback(() => {
-    //if not growing, return outside of the scope of immunity that useCallback provides to preserve against re-rendering
     //basecase
+    //if not growing, exit f()
     if (!growingRef) {
       return;
     }
 
-    //trigger growth
+    setGrid((grid) => {
+      return produce(grid, (gridCopy) => {
+        for (let i = 0; i < rowPlaces; i++) {
+          for (let j = 0; j < colValues; j++) {
+            let neighbors = 0;
+            if (gridCopy[i - 1][j - 1] === 1) {
+              neighbors += 1;
+            }
+          }
+        }
+      });
+    });
+    //every cell is the coordinate of a row and a col
+    //each recursive call, the cells composing the grid change ( to alive or dead ) according to:
+    //the number of neighbors they have
+    //
+    //at each second the recursive call follows the cell conditions to mutate our copy of the grid state and not the grid state itself so as to follow principles of immutability
+    //the game of life rules will dictate the conditions of cells in each recursive call of f()
+
+    //recursively call f() every 1 second to check if growing is true
     setTimeout(catalyze, 1000);
   }, []);
 
@@ -52,7 +72,7 @@ const App = () => {
           setGrowing(!growing);
         }}
       >
-        Start Growth
+        {growing ? "Terminate" : "Catalyze"}
       </button>
       <Box>
         {/* a cell coordinate is determined by the axes of i and j */}
@@ -60,7 +80,7 @@ const App = () => {
           rows.map((col, j) => (
             <div
               onClick={() => {
-                //                  current state, updated state
+                //                  current immutable state, updated immutable state
                 const newGrid = produce(gridIs, (gridCopy) => {
                   //updated cell position boolean toggle
                   gridCopy[i][j] = gridIs[i][j] ? 0 : 1;
