@@ -50,7 +50,7 @@ const App = () => {
   const catalyze = useCallback(() => {
     //basecase
     //if not growing, exit f()
-    if (!growingRef) {
+    if (!growingRef.current) {
       return;
     }
     //otherwise change cells iteratively according to neighbor conditions --> mutate copy of grid state --> update grid state immutably
@@ -103,6 +103,10 @@ const App = () => {
       <button
         onClick={() => {
           setGrowing(!growing);
+          if (!growing) {
+            growingRef.current = true;
+            catalyze();
+          }
         }}
       >
         {growing ? "Terminate" : "Catalyze"}
