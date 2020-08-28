@@ -55,25 +55,38 @@ const App = () => {
     }
     //otherwise change cells iteratively according to neighbor conditions --> mutate copy of grid state --> update grid state immutably
     setGrid((grid) => {
-      return produce(grid, gridCopy => {
+      return produce(grid, (gridCopy) => {
         for (let i = 0; i < rowPlaces; i++) {
           for (let j = 0; j < colValues; j++) {
             let neighbors = 0;
             //dynamically map over neighborCoords for each cell to determine how many possible neighbors a given cell has
             neighborCoords.forEach(([x, y]) => {
-                //apply the neighbor coordinates to navigate from the origin of a given cell to its neighbors
-                const updatedI = i + x;
-                const updatedJ = j + y;
-                //check that the neighbor coordinates of a given cell fall within the range of the grid
-                if (newI >= 0 && newI < rowPlaces && newJ >= 0 && newJ < colValues) {
-                  neighbors += grid[newI][newJ]
-                }
-              })
+              //apply the neighbor coordinates to navigate from the origin of a given cell to its neighbors
+              const updatedI = i + x;
+              const updatedJ = j + y;
+              //check that the neighbor coordinates of a given cell fall within the range of the grid
+              if (
+                updatedI >= 0 &&
+                updatedI < rowPlaces &&
+                updatedJ >= 0 &&
+                updatedJ < colValues
+              ) {
+                neighbors += grid[updatedI][updatedJ];
+              }
+            });
+            //if a cell has fewer than 2 or more than 3 neighbors, it dies
+            if (neighbors < 2 || neighbors > 3) {
+              gridCopy[i][j] = 0;
+              // if a cell is dead (0) and it has 3 neighbors
+            } else if (grid[i][j] === 0 && neighbors === 3) {
+              // it becomes alive
+              gridCopy[i][j] = 1;
             }
           }
         }
       });
     });
+
     //every cell is the coordinate of a row and a col
     //each recursive call, the cells composing the grid change ( to alive or dead ) according to:
     //the number of neighbors they have
