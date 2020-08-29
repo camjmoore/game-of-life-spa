@@ -23,6 +23,36 @@ const Box = styled.div`
   grid-template-columns: repeat(${colValues}, 20px);
 `;
 
+const Button = styled.button`
+   display: inline-block;
+   padding: 0.35em 1.2em;
+   border: 0.1em solid #ffffff;
+   margin: 0 0.3em 0.3em 0;
+   border-radius: 0.12em;
+   box-sizing: border-box;
+   text-decoration: none;
+   font-family: "Roboto", sans-serif;
+   font-weight: 300;
+   color: #95e6cb;
+   text-align: center;
+   transition: all 0.2s;
+
+  &:hover {
+     color: #282c34;
+     background-color: #ffffff;
+  }
+`;
+
+const ControlPnl = styled.div`
+  display: flex;
+  width: 45%;
+  padding: 1%;
+  margin: 0 auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const emptyGrid = () => {
   // initialize outer array
   const rows = [];
@@ -115,64 +145,69 @@ const App = () => {
   }, []);
 
   return (
-    <div className="App-header">
-      <button
-        onClick={() => {
-          setGrowing(!growing);
-          if (!growing) {
-            growingRef.current = true;
-            catalyze();
-          }
-        }}
-      >
-        {growing ? "Terminate" : "Catalyze"}
-      </button>
+    <>
+      <ControlPnl>
+        <Button
+          onClick={() => {
+            setGrowing(!growing);
+            if (!growing) {
+              growingRef.current = true;
+              catalyze();
+            }
+          }}
+        >
+          {growing ? "Terminate" : "Catalyze"}
+        </Button>
 
-      <button
-        onClick={() => {
-          setGrid(emptyGrid());
-        }}
-      >
-        clear
-      </button>
+        <Button
+          onClick={() => {
+            setGrid(emptyGrid());
+          }}
+        >
+          clear
+        </Button>
 
-      <button
-        onClick={() => {
-          randomGrid();
-        }}
-      >
-        randomize
-      </button>
-      <Box>
-        {/* a cell coordinate is determined by the axes of i and j */}
-        {gridIs.map((rows, i) =>
-          rows.map((col, j) => (
-            <div
-              onClick={() => {
-                //                  current immutable state, updated immutable state
-                const newGrid = produce(gridIs, (gridCopy) => {
-                  //updated cell position boolean toggle
-                  gridCopy[i][j] = gridIs[i][j] ? 0 : 1;
-                });
-                //setState to updated state containing updated cell positions
-                setGrid(newGrid);
-              }}
-              key={`${i}-${j}`}
-              style={{
-                height: 18,
-                width: 18,
-                margin: "1px 1px auto",
-                borderRadius: "100%",
-                boxShadow: "inset 0 0 3px #484f5e",
-                border: "solid 1px #484f5e",
-                //color is green if cell position is toggled true otherwise its undefined (blank)
-                backgroundColor: gridIs[i][j] ? "#95e6cb" : undefined,
-              }}
-            />
-          ))
-        )}
-      </Box>
-    </div>
+        <Button
+          onClick={() => {
+            randomGrid();
+          }}
+        >
+          randomize
+        </Button>
+      </ControlPnl>
+
+      <div className="App-header">
+        <Box>
+          {/* a cell coordinate is determined by the axes of i and j */}
+          {gridIs.map((rows, i) =>
+            rows.map((col, j) => (
+              <div
+                onClick={() => {
+                  //                  current immutable state, updated immutable state
+                  const newGrid = produce(gridIs, (gridCopy) => {
+                    //updated cell position boolean toggle
+                    gridCopy[i][j] = gridIs[i][j] ? 0 : 1;
+                  });
+                  //setState to updated state containing updated cell positions
+                  setGrid(newGrid);
+                }}
+                key={`${i}-${j}`}
+                style={{
+                  height: 18,
+                  width: 18,
+                  margin: "1px 1px auto",
+                  borderRadius: "100%",
+                  boxShadow: "inset 0 0 3px #484f5e",
+                  border: "solid 1px #484f5e",
+                  //color is green if cell position is toggled true otherwise its undefined (blank)
+                  backgroundColor: gridIs[i][j] ? "#95e6cb" : undefined,
+                }}
+              />
+            ))
+          )}
+        </Box>
+      </div>
+    </>
   );
 };
 
