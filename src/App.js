@@ -23,18 +23,22 @@ const Box = styled.div`
   grid-template-columns: repeat(${colValues}, 20px);
 `;
 
+const emptyGrid = () => {
+  // initialize outer array
+  const rows = [];
+  // for as many number of 'rowplaces'...(50)
+  for (let i = 0; i < rowPlaces; i++) {
+    // produce an array w/ length of 'colValues' populated by 0's... (50)
+    rows.push(Array.from(Array(colValues), () => 0));
+  }
+  // rows --> array of 50 arrays, each containing 50 0's
+  return rows;
+};
+
 const App = () => {
   // gridIs --> rows
   const [gridIs, setGrid] = useState(() => {
-    // initialize outer array
-    const rows = [];
-    // for as many number of 'rowplaces'...(50)
-    for (let i = 0; i < rowPlaces; i++) {
-      // produce an array w/ length of 'colValues' populated by 0's... (50)
-      rows.push(Array.from(Array(colValues), () => 0));
-    }
-    // rows --> array of 50 arrays, each containing 50 0's
-    return rows;
+    return emptyGrid();
   });
 
   const [growing, setGrowing] = useState(false);
@@ -95,7 +99,7 @@ const App = () => {
     //the game of life rules will dictate the conditions of cells in each recursive call of f()
 
     //recursively call f() every 1 second to check if growing is true
-    setTimeout(catalyze, 100);
+    setTimeout(catalyze, 500);
   }, []);
 
   return (
@@ -110,6 +114,14 @@ const App = () => {
         }}
       >
         {growing ? "Terminate" : "Catalyze"}
+      </button>
+
+      <button
+        onClick={() => {
+          setGrid(emptyGrid());
+        }}
+      >
+        clear
       </button>
       <Box>
         {/* a cell coordinate is determined by the axes of i and j */}
