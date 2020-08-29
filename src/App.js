@@ -41,6 +41,18 @@ const App = () => {
     return emptyGrid();
   });
 
+  const randomGrid = () => {
+    const rows = [];
+    // for as many number of 'rowplaces'...(50)
+    for (let i = 0; i < rowPlaces; i++) {
+      // produce an array w/ length of 'colValues' populated by 0's... (50)
+      rows.push(
+        Array.from(Array(colValues), () => (Math.random() > 0.75 ? 1 : 0))
+      );
+    }
+    setGrid(rows);
+  };
+
   const [growing, setGrowing] = useState(false);
 
   const growingRef = useRef(growing);
@@ -122,6 +134,14 @@ const App = () => {
         }}
       >
         clear
+      </button>
+
+      <button
+        onClick={() => {
+          randomGrid();
+        }}
+      >
+        randomize
       </button>
       <Box>
         {/* a cell coordinate is determined by the axes of i and j */}
